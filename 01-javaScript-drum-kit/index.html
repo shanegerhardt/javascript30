@@ -70,9 +70,10 @@
 
   function playLoop(){
     var sound = currentLoop[loopIndex % currentLoop.length];
+    playSound(sound);
+    loopIndex++;
+    var sound = currentLoop[loopIndex % currentLoop.length];
     loopId = setTimeout(function(){
-      loopIndex++;
-      playSound(sound);
       playLoop();
     }, sound.time);
   }
@@ -82,6 +83,7 @@
   }
 
   function keyClick(e){
+    e.preventDefault();
     var event = {
       keyCode: this.dataset.key
     };
@@ -91,7 +93,7 @@
   function playSound(e) {
     const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
     key.classList.add('playing');
-    if(e.keyCode === 32) {
+    if(e.keyCode == 32) {
       if(recordingLoop) {
         key.dataset.recording = "Record New Loop";
         console.log('Stop Recording');
@@ -131,6 +133,7 @@
   const keys = document.querySelectorAll('.key');
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
   keys.forEach(key => key.addEventListener('mousedown', keyClick));
+  keys.forEach(key => key.addEventListener('touchend', keyClick));
 
 </script>
 
